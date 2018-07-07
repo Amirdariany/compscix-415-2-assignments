@@ -1,0 +1,2 @@
+data("diamonds")
+glimpse(diamonds)
