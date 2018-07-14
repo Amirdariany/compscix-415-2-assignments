@@ -1,0 +1,258 @@
+---
+title: "COMPSCIX 415.2 Homework 5/Midterm"
+author: "amir dariany"
+date: "July 13, 2018"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+My Github repository for my assignments can be found at this URL: https://github.com/Amirdariany/compscix-415-2-assignments
+
+*VIM maybe needed so please install.packages("VIM")
+
+#R Markdown
+#Table of Contents
+```{R use tidy}
+library(tidyverse)
+```
+
+
+##1)R studio and R Markdown (3 points): Use markdown headers in your document to clearly separate each midterm question and add a table of contents to your document.
+
+##2)The tidyverse packages (3 points)
+
+###2-1)Can you name which package is associated with each task below?
+
+Plotting - library(ggplot2)
+Data munging/wrangling -library(dplyr)
+Reshaping (spreading and gathering) data -library(tidyr)
+Importing/exporting data -
+
+###2-2)Now can you name two functions that you've used from each package that you listed above for these tasks?
+
+Plotting - ggplot()and plot()
+Data munging/wrangling -select() and filter()
+Reshaping data -
+Importing/exporting data -read_csv() and write_csv
+
+##3)R Basics
+
+###3-1)Fix this code with the fewest number of changes possible so it works:
+
+Answer:My_data.name___is.too00ooLong. we just need to delete "!" so it work.I would not choose this name to pass my values though.
+
+```{R fix1}
+My_data.name___is.too00ooLong <- c( 1 , 2   , 3 )
+```
+
+###3-2)Fix this code so it works:
+
+Answer: in order to pass the values inside the parenthesis 'it should become 'it' using single quotes for words and outside C with capital letter should become c with small letter so the function can work so use c() for passing these words to vector my_string
+
+```{R fix2}
+my_string <- c('has','error','in','it')
+```
+
+###3-3)Look at the code below and comment on what happened to the values in the vector.
+
+answer: When we have only numbers without two single or double quotes around it , this makes R to pass numeric values to my_vector and later we can perform different operations on my_vector since there are only numeric values in it when creating a vector with C(). We can also use class() function to find the type of values in vector. But when we pass even one value inside two single quotes or apostrophe ' x ' , this makes x which was numeric , now a character. Even one character inside the vector makes the entire vector not ready for operations and to become a charecter. If we use class() for our vector now we know that the properties of this vector has changed from numeric to character.
+
+```{R fix3}
+my_vector1 <- c(1, 2, 3, 4, 5)
+my_vector <- c(1, 2, '3', '4', 5)
+class(my_vector1)
+class(my_vector)
+```
+
+##4)Data import/export
+###4-1)Download the rail_trail.txt file from Canvas (in the Midterm Exam section) and successfully import it into R. Prove that it was imported successfully by including your import code and taking a glimpse of the result.
+
+```{R Load}
+library(tidyverse)
+rail_trail <- read.table("C:/Users/Amirdariany/Desktop/Intro to Data Science/R Mid Term/rail_trail.txt")
+```
+
+```{R glimpse}
+glimpse(rail_trail)
+```
+
+###4-2)Export the file into a comma-separated file and name it "rail_trail.csv". Make sure you define the path correctly so that you know where it gets saved. Then reload the file. Include your export and import code and take another glimpse.
+
+```{R write}
+write.csv(rail_trail,'C:/Users/Amirdariany/Desktop/rail_trail.csv',row.names=T)
+```
+
+```{R read again}
+rail_trail <- read.csv('C:/Users/Amirdariany/Desktop/rail_trail.csv')
+glimpse(rail_trail)
+```
+
+##5)Visulaization
+
+###5-1)Critique this graphic: give only three examples of what is wrong with this graphic. Be concise.
+
+Answer:
+1-	We can not mix different age with different gender in one graphic since this is confusing. A question cam come up now that what percentage fo under 45 or over 65 were men and women.
+2-	Same color is used for three age categories and it is dark and better color can be used to distinguish for each age categories
+3-	The sum of each catagirs don't sum to 100% so I would add the third respond which can be have not decided, etc or just re-do the analysis so it sum to 100%. ( make sum 100 and recalculate the percentages )
+
+
+###5-2)Reproduce this graphic using the diamonds data set.
+
+```{R boxplot}
+library(ggplot2)
+ggplot(data = diamonds) +geom_boxplot(mapping = aes(x = cut, y = carat, fill=color),position="identity") +
+xlab('CUT OF DIAMOND') + ylab('CARAT OF DIAMOND') +
+coord_flip()
+```
+
+###5-3)The previous graphic is not very useful. We can make it much more useful by changing one thing about it. Make the change and plot it again
+```{R boxplot fixed}
+library(ggplot2)
+ggplot(data = diamonds) +geom_boxplot(mapping = aes(x = cut, y = carat, fill=color),position="dodge") +
+xlab('CUT OF DIAMOND') + ylab('CARAT OF DIAMOND') +
+coord_flip()
+```
+
+Answer: clearly the first boxplot has stacked the data on top of each other in one boxplot for each cut and we cannot clearly distingiush between various colors. but by taking out position "identity" or converting it to "dodge" we can sepearte box plots for each color for each cut and transparently see thier outliers and median and min and max, while for example we cannot see the outliers for each color in first boxplot.
+
+##6)Data munging and wrangling (6 points)
+
+###6-1)Is this data "tidy"? If yes, leave it alone and go to the next problem. If no, make it tidy. Note: this data set is called table2 and is available in the tidyverse package. It should be ready for you to use after you've loaded the tidyverse package.
+
+answer:No it is not tidy. In order for one table to be tidy it should meet below criteria that each variable in the data set is placed in its own column and each observation is placed in its own row and each value is placed in its own cell. In this case under type we have both cases and population under one column so we really need to have a column for population and a column for cases for the same information of country, year and count.  So we use spread() that returns a copy of your data set but transform two variable under one column to two columns so basically it adds a new column for each unique value. We first use the key column and then value column in the paranthesis. So for table 2 we have:
+
+```{R tidy}
+library(tidyverse)
+spread(table2, type, count)
+```
+
+
+###6-2)Create a new column in the diamonds data set called price_per_carat that shows the price of each diamond per carat (hint: divide). Only show me the code, not the output.
+
+```{R price per carat}
+diamonds <- diamonds%>%mutate(price_per_carat = price/carat)
+```
+
+###6-3)For each cut of diamond in the diamonds data set, how many diamonds, and what proportion, have a price > 10000 and a carat < 1.5? There are several ways to get to an answer, but your solution must use the data wrangling verbs from the tidyverse in order to get credit.
+
+```{R filter}
+diamondsfair <- select(filter(diamonds, cut == 'Fair'),price,carat)
+diamondsfairconditioned <- select(filter(diamonds, price>10000 & carat<1.5,cut == 'Fair'),price,carat)
+summarize(diamonds, number_of_diamonds_fair = nrow(diamondsfairconditioned), proportion_percent= (number_of_diamonds_fair/nrow(diamondsfair)*100))
+
+diamondsGood <- select(filter(diamonds, cut == 'Good'),price,carat)
+diamondsGoodconditioned <- select(filter(diamonds, price>10000 & carat<1.5,cut == 'Good'),price,carat)
+summarize(diamonds, number_of_diamonds_good = nrow(diamondsGoodconditioned), proportion_percent= (number_of_diamonds_good/nrow(diamondsGood)*100))
+
+diamondsVeryGood <- select(filter(diamonds, cut == 'Very Good'),price,carat)
+diamondsVeryGoodconditioned<- select(filter(diamonds, price>10000 & carat<1.5,cut == 'Very Good'),price,carat)
+summarize(diamonds, number_of_diamonds_good = nrow(diamondsVeryGoodconditioned), proportion_percent= (number_of_diamonds_good/nrow(diamondsVeryGood)*100))
+
+diamondsPremium <- select(filter(diamonds, cut == 'Premium'),price,carat)
+diamondsPremiumconditioned <- select(filter(diamonds, price>10000 & carat<1.5,cut == 'Premium'),price,carat)
+summarize(diamonds, number_of_diamonds_Premium = nrow(diamondsPremiumconditioned), proportion_percent= (number_of_diamonds_Premium/nrow(diamondsPremium)*100))
+
+diamondsIdeal <- select(filter(diamonds, cut == 'Ideal'),price,carat)
+diamondsIdealconditioned <- select(filter(diamonds, price>10000 & carat<1.5,cut == 'Ideal'),price,carat)
+summarize(diamonds, number_of_diamonds_Ideal = nrow(diamondsIdealconditioned), proportion_percent= (number_of_diamonds_Ideal/nrow(diamondsIdeal)*100))
+```
+per tables above which indiacates number of diamonds and their proportion for each diamond cut we can find out that the more diamonds cut improves from fair and good to premium and ideal, number of diamonds of less than 1.5 carat with price over 10K increases. Also there is a larger proportion of less than 1.5 carat and more than $10K to total number of a one cut, for ideal compare to lower grades diamonds.That being said it is less likely that lower grades cut with less 1.5 carat to be sold over 10K. Also , we find that there is a direct relationship between increase in carat and in increase in price.
+
+####6-3-1)Do the results make sense? Why?
+
+as discussed above it makes sense since premium and ideal cut only can have instances where their diamonds can be sold for more than 10K, and still they are only a small portion of total diamonds sold in their catagory of cut. so I would try to understand the attributes of such diamonds that makes them so expenisve for a 1.5 carat diamond. 
+
+
+####6-3-2)Do we need to be wary of any of these numbers? Why?
+answer:I am going to be worried about fair and good cut diamonds since there is not that many of them compare to their cut samples. This can be either an error or selling a low grade cut diamond for a high price. I would change it by replacing with ideal or premium for my customer.I also take the summary of each cut catagorry and plot the box plot to see if these are outliers or not and how close they are to the median and the box.
+
+##7)EDA
+###7-1)During what time period is this data from?
+
+Answer: 2000 to 2015
+```{R year count}
+txhousing %>% 
+  count(year)
+```
+
+
+###7-2)How many cities are represented?
+
+answer: 46 cities with 187 data points for each 
+```{R countcity}
+txhousing %>% 
+  count(city)
+```
+
+###7-3)Which city, month and year had the highest number of sales?
+
+answer: houston,month of July in 2015 has the highest sales.
+
+```{R highest sales}
+txhousing[which.max(txhousing$sales),]
+```
+
+###7-4)What kind of relationship do you think exists between the number of listings and the number of sales? Check your assumption and show your work. 
+
+answer:There is a linear relationship as the number of listings increases , number of sales increases but relatioship is not one on one. I think for each 10,000 increase in listings , approx. quarter of that we expect for number of sales.
+
+```{R plot and regression}
+ggplot(txhousing, aes(listings, sales)) + 
+  geom_point() +
+  geom_smooth(method = "lm",se = F)
+```
+
+  
+###7-5)What proportion of sales is missing for each city?
+answer: 568 sales is missing in 8602 rows for sales,approx.0.06, indicated in the graph as well.Zero sales is missing for each city 
+```{R missing}
+library(VIM)
+aggr(txhousing)
+map_df(txhousing,function(x) sum(is.na(x)))
+sum(is.na(txhousing$sales)) 
+
+txhousing %>% 
+  group_by(city) %>% 
+  summarise(
+    count = n(),
+    number_of_NAs = sum(is.na(txhousing$city)))
+```
+
+
+###7-6)Looking at only the cities and months with greater than 500 sales:
+
+####7-6-1)Are the distributions of the median sales price (column name median), when grouped by city, different? The same? Show your work.
+Answer: The distribition of median sales price for each city both in boxplot and histogram for all sales is completely different.However, in cities and month that is sales more than 500, both boxplot and histogran indicates some level of consistency although not exactly the same.for example median price for cities of more than 500 sales are mainly ranging between 100K to 225K
+
+```{R histogram distribution}
+txhousing4<- filter(txhousing, sales>500)
+ggplot(data=txhousing)+geom_boxplot(mapping = aes(x=reorder(city,sales),y=sales))
+ggplot(data=txhousing)+geom_boxplot(mapping = aes(x=reorder(city,median),y=median))
+ggplot(data=txhousing)+geom_histogram(mapping = aes(x=median))+facet_wrap(~city)
+
+ggplot(data=txhousing4)+geom_boxplot(mapping = aes(x=reorder(city,sales),y=sales))
+ggplot(data=txhousing4)+geom_boxplot(mapping = aes(x=reorder(city,median),y=median))
+ggplot(data=txhousing4)+geom_boxplot(mapping = aes(x=reorder(city,median),y=median))+facet_wrap(~city)
+ggplot(data=txhousing4)+geom_histogram(mapping = aes(x=median))+facet_wrap(~city)
+```
+
+                                                                           
+####7-6-2)Any cities that stand out that you'd want to investigate further?
+
+answer: for more than 500 sales , cities like corpus christi has a limited amount of sales data and lower median price which makes it interesting case to know why. same for arlington and el paso.
+
+####7-6-3)Why might we want to filter out all cities and months with sales less than 500?
+
+```{R median vs sales}
+ggplot(txhousing4, aes(sales, median)) + geom_point() +geom_smooth(method = "lm",se = F)
+```
+
+answer:There is values with infinite values for less than 500 sales and also looks like there is a lot of noise for cities with less than 500 sales when we plot the box plot for sales and median for txhousing vs txhousing 4 ( for more than 500 sales). When I used re-order function for less than 500 sales , plots could not be re-ordered 100% while for more than 500 sales both sale and median price were reordered without any missing or infinite data. so it seems that there are values in less than 500 sales that make our analysis prone to error. Also , cities for more than 500 sales can give us a more better median price for purchase certainty and they are more recent , it gives a more confident number now that it is fully re-ordered and there is no error message for infinite values in rows as well.
+
+The End
